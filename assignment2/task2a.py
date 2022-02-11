@@ -17,6 +17,7 @@ def pre_process_images(X: np.ndarray):
 
     mean=np.mean(X)
     sd=np.std(X)
+    print("Mean:", mean, ", STD: ", sd)
     X=(X-mean)/sd
 
     biasTrick=np.ones(X.shape[0])
