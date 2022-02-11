@@ -40,7 +40,7 @@ class SoftmaxTrainer(BaseTrainer):
         The function is called once for every batch (see trainer.py) to perform the train step.
         The function returns the mean loss value which is then automatically logged in our variable self.train_history.
 
-        Args:
+        Args:sdfgh
             X: one batch of images
             Y: one batch of labels
         Returns:
