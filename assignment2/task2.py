@@ -8,7 +8,7 @@ np.random.seed(0)
 
 def calculate_accuracy(X: np.ndarray, targets: np.ndarray, model: SoftmaxModel) -> float:
     """
-    Args:
+    Args:asd
         X: images of shape [batch size, 785]
         targets: labels/targets of each image of shape: [batch size, 10]
         model: model of class SoftmaxModel
