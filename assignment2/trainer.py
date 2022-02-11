@@ -88,5 +88,15 @@ class BaseTrainer:
                     val_history["loss"][global_step] = val_loss
                     val_history["accuracy"][global_step] = accuracy_val
                     # TODO: Implement early stopping (copy from last assignment)
+                    if(global_step>10*num_steps_per_val):
+                        minste=val_history["loss"][min(val_history["loss"], key=val_history["loss"].get)]
+                        # print(minste)
+                        # print(val_history["loss"][global_step])
+                        is_not_better=True
+                        for i in range(10):
+                            if (val_history["loss"][global_step-num_steps_per_val*i]<=minste):
+                                is_not_better=False
+                        if(is_not_better):
+                            return train_history, val_history
                 global_step += 1
         return train_history, val_history
