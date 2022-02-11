@@ -14,6 +14,13 @@ def pre_process_images(X: np.ndarray):
     assert X.shape[1] == 784,\
         f"X.shape[1]: {X.shape[1]}, should be 784"
     # TODO implement this function (Task 2a)
+
+    mean=np.mean(X)
+    print(mean)
+
+    biasTrick=np.ones(X.shape[0])
+    X=np.c_[X,biasTrick]
+
     return X
 
 
