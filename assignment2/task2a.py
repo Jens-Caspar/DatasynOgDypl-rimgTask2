@@ -55,7 +55,7 @@ class SoftmaxModel:
         # Always reset random seed before weight init to get comparable results.
         np.random.seed(1)
         # Define number of input nodes
-        self.I = None
+        self.I = 16 #None
         self.use_improved_sigmoid = use_improved_sigmoid
 
         # Define number of output nodes
