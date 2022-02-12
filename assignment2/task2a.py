@@ -73,6 +73,7 @@ class SoftmaxModel:
             self.ws.append(w)
             prev = size
         self.grads = [None for i in range(len(self.ws))]
+        print("gradshape0", self.grads)
         
         self.hidden_layer_output=[]
 
@@ -115,11 +116,19 @@ class SoftmaxModel:
         # A list of gradients.
         # For example, self.grads[0] will be the gradient for the first hidden layer
         self.grads = []
-
-        print(self.hidden_layer_output.shape, "hei")
-        self.grads[1]=(-(targets-outputs)).T@self.hidden_layer_output
-        self.grads[0]=X.T@np.transpose(self.hidden_layer_output*(1-self.hidden_layer_output))*(self.ws.T@self.grads[1])
+        # print(self.grads)
         
+
+        # print(self.hidden_layer_output.shape, "hei",(-(targets-outputs)).shape )
+        grad1=np.transpose(-(targets-outputs))@(self.hidden_layer_output)
+        
+        
+        # print("testasda", grad1.shape, (self.ws[1] @ grad1).shape)
+        # print("adkjfbsdlkhfbl",  self.hidden_layer_output.shape, (1-self.hidden_layer_output).shape , (-(targets-outputs)).shape, np.transpose(self.ws[1]).shape)
+        grad0=np.transpose( np.multiply(self.hidden_layer_output * (1-self.hidden_layer_output) ,((-(targets-outputs))@np.transpose(self.ws[1]))) )  @  X
+        # print("gradshape", grad0.shape, grad1.shape)
+        
+        self.grads= [np.transpose(grad0)/X.shape[0],np.transpose(grad1)/X.shape[0]]
 
 
 
