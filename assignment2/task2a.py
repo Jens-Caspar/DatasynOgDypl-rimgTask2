@@ -82,7 +82,7 @@ class SoftmaxModel:
             y: output of model with shape [batch size, num_outputs]
         """
         
-            
+        
         # TODO implement this function (Task 2b)
         # HINT: For performing the backward pass, you can save intermediate activations in variables in the forward pass.
         # such as self.hidden_layer_output = ...
