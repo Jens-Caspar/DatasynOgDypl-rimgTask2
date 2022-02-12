@@ -55,7 +55,7 @@ class SoftmaxModel:
         # Always reset random seed before weight init to get comparable results.
         np.random.seed(1)
         # Define number of input nodes
-        self.I = 16 #None
+        self.I = 785 #None
         self.use_improved_sigmoid = use_improved_sigmoid
 
         # Define number of output nodes
@@ -88,9 +88,12 @@ class SoftmaxModel:
         # such as self.hidden_layer_output = ...
         # 
         hidden_layer_z=X@self.ws[0]  #batchsize X N_neurons
-        hidden_layer_a=sigmoid(hidden_layer_z)
+        hidden_layer_a=1/(1+np.exp(-hidden_layer_z))
         output_layer_z=hidden_layer_a@self.ws[1] #batchsize X N_outputs
-        output=softmax(output_layer_z)
+        summering=np.sum(np.exp(output_layer_z), axis=1)
+        summering=summering.reshape(len(summering),1)
+        den=np.repeat(summering,self.ws[-1].shape[1], axis=1)
+        output=np.exp(output_layer_z)*(1/den)
 
         return output
 
