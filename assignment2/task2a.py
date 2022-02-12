@@ -17,7 +17,7 @@ def pre_process_images(X: np.ndarray):
 
     mean=np.mean(X)
     sd=np.std(X)
-    print("Mean:", mean, ", STD: ", sd)
+    print("Mean:", mean, ", STD: ", sd) # Mean: 33.55274553571429 , STD:  78.87550070784701
     X=(X-mean)/sd
 
     biasTrick=np.ones(X.shape[0])
@@ -80,7 +80,7 @@ class SoftmaxModel:
         Returns:
             y: output of model with shape [batch size, num_outputs]
         """
-        
+        self.zj[0]=np.dot(X, self.ws[0])
             
         # TODO implement this function (Task 2b)
         # HINT: For performing the backward pass, you can save intermediate activations in variables in the forward pass.
