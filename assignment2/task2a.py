@@ -73,6 +73,8 @@ class SoftmaxModel:
             self.ws.append(w)
             prev = size
         self.grads = [None for i in range(len(self.ws))]
+        
+        self.hidden_layer_output=[]
 
     def forward(self, X: np.ndarray) -> np.ndarray:
         """
@@ -88,8 +90,8 @@ class SoftmaxModel:
         # such as self.hidden_layer_output = ...
         # 
         hidden_layer_z=X@self.ws[0]  #batchsize X N_neurons
-        hidden_layer_a=1/(1+np.exp(-hidden_layer_z))
-        output_layer_z=hidden_layer_a@self.ws[1] #batchsize X N_outputs
+        self.hidden_layer_output=1/(1+np.exp(-hidden_layer_z))
+        output_layer_z=self.hidden_layer_output@self.ws[1] #batchsize X N_outputs
         summering=np.sum(np.exp(output_layer_z), axis=1)
         summering=summering.reshape(len(summering),1)
         den=np.repeat(summering,self.ws[-1].shape[1], axis=1)
@@ -113,6 +115,13 @@ class SoftmaxModel:
         # A list of gradients.
         # For example, self.grads[0] will be the gradient for the first hidden layer
         self.grads = []
+
+        print(self.hidden_layer_output.shape, "hei")
+        self.grads[1]=(-(targets-outputs)).T@self.hidden_layer_output
+        self.grads[0]=X.T@np.transpose(self.hidden_layer_output*(1-self.hidden_layer_output))*(self.ws.T@self.grads[1])
+        
+
+
 
         for grad, w in zip(self.grads, self.ws):
             assert grad.shape == w.shape,\
