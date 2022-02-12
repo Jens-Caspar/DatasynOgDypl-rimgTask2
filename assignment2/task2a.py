@@ -1,4 +1,5 @@
 import numpy as np
+from torch import sigmoid, softmax
 import utils
 import typing
 np.random.seed(1)
@@ -85,9 +86,13 @@ class SoftmaxModel:
         # TODO implement this function (Task 2b)
         # HINT: For performing the backward pass, you can save intermediate activations in variables in the forward pass.
         # such as self.hidden_layer_output = ...
+        # 
+        hidden_layer_z=X@self.ws[0]  #batchsize X N_neurons
+        hidden_layer_a=sigmoid(hidden_layer_z)
+        output_layer_z=hidden_layer_a@self.ws[1] #batchsize X N_outputs
+        output=softmax(output_layer_z)
 
-
-        return None
+        return output
 
     def backward(self, X: np.ndarray, outputs: np.ndarray,
                  targets: np.ndarray) -> None:
