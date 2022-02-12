@@ -47,10 +47,20 @@ class SoftmaxTrainer(BaseTrainer):
             loss value (float) on batch
         """
         # TODO: Implement this function (task 2c)
+        self.model.ws[0]=np.random.uniform(-1, 1, (785, 64))
+        self.model.ws[1]=np.random.uniform(-1, 1, (64, 10))
+        
+        
+        forwardStep=self.model.forward(X_batch)
+        # print(forwardStep)
+        self.model.backward(X_batch, forwardStep,Y_batch)
+        self.model.ws[0]=self.model.ws[0]-self.learning_rate*self.model.grads[0]
+        self.model.ws[1]=self.model.ws[1]-self.learning_rate*self.model.grads[1]
 
-        loss = 0
-
-        loss = cross_entropy_loss(Y_batch, logits)  # sol
+        
+        loss = cross_entropy_loss(Y_batch, forwardStep)
+        # print(loss)
+        # loss = cross_entropy_loss(Y_batch, logits)  # sol
 
         return loss
 
@@ -120,7 +130,8 @@ if __name__ == "__main__":
     # Plot loss for first model (task 2c)
     plt.figure(figsize=(20, 12))
     plt.subplot(1, 2, 1)
-    plt.ylim([0., .5])
+    plt.ylim([0., 5.5])
+    # plt.ylim([0., .5])
     utils.plot_loss(train_history["loss"],
                     "Training Loss", npoints_to_average=10)
     utils.plot_loss(val_history["loss"], "Validation Loss")
