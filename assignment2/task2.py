@@ -16,8 +16,17 @@ def calculate_accuracy(X: np.ndarray, targets: np.ndarray, model: SoftmaxModel) 
         Accuracy (float)
     """
     # TODO: Implement this function (copy from last assignment)
-    accuracy = 0
-    return accuracy
+    
+    fr=model.forward(X)
+    
+    b = np.zeros_like(fr)
+    b[np.arange(len(fr)), fr.argmax(1)] = 1
+    # print(b[19], " guess\n ", targets[19], " tar ")
+    a=(X.shape[0]-(0.5*np.sum(abs(targets-b))))/X.shape[0]
+    # print("a", a)
+    # print((np.sum(abs(targets-b))), "  ", X.shape[0])
+
+    return a
 
 
 class SoftmaxTrainer(BaseTrainer):
