@@ -24,16 +24,16 @@ if __name__ == "__main__":
     Y_train = one_hot_encode(Y_train, 10)
     Y_val = one_hot_encode(Y_val, 10)
 
-    # model = SoftmaxModel(
-    #     neurons_per_layer,
-    #     use_improved_sigmoid,
-    #     use_improved_weight_init)
-    # trainer = SoftmaxTrainer(
-    #     momentum_gamma, use_momentum,
-    #     model, learning_rate, batch_size, shuffle_data,
-    #     X_train, Y_train, X_val, Y_val,
-    # )
-    # train_history, val_history = trainer.train(num_epochs)
+    model = SoftmaxModel(
+        neurons_per_layer,
+        use_improved_sigmoid,
+        use_improved_weight_init)
+    trainer = SoftmaxTrainer(
+        momentum_gamma, use_momentum,
+        model, learning_rate, batch_size, shuffle_data,
+        X_train, Y_train, X_val, Y_val,
+    )
+    train_history, val_history = trainer.train(num_epochs)
 
     # Example created for comparing with and without shuffling.
     # For comparison, show all loss/accuracy curves in the same plot
@@ -42,30 +42,30 @@ if __name__ == "__main__":
     use_improved_weight_init=True
     
     
-    # wei_model = SoftmaxModel(
-    #     neurons_per_layer,
-    #     use_improved_sigmoid,
-    #     use_improved_weight_init)
-    # wei_trainer = SoftmaxTrainer(
-    #     momentum_gamma, use_momentum,
-    #     wei_model, learning_rate, batch_size, shuffle_data,
-    #     X_train, Y_train, X_val, Y_val,
-    # )
-    # wei_train_history, wei_val_history = wei_trainer.train(num_epochs)
+    wei_model = SoftmaxModel(
+        neurons_per_layer,
+        use_improved_sigmoid,
+        use_improved_weight_init)
+    wei_trainer = SoftmaxTrainer(
+        momentum_gamma, use_momentum,
+        wei_model, learning_rate, batch_size, shuffle_data,
+        X_train, Y_train, X_val, Y_val,
+    )
+    wei_train_history, wei_val_history = wei_trainer.train(num_epochs)
     
     use_improved_sigmoid=True
     
     
-    # sig_model = SoftmaxModel(
-    #     neurons_per_layer,
-    #     use_improved_sigmoid,
-    #     use_improved_weight_init)
-    # sig_trainer = SoftmaxTrainer(
-    #     momentum_gamma, use_momentum,
-    #     sig_model, learning_rate, batch_size, shuffle_data,
-    #     X_train, Y_train, X_val, Y_val,
-    # )
-    # sig_train_history, sig_val_history = sig_trainer.train(num_epochs)
+    sig_model = SoftmaxModel(
+        neurons_per_layer,
+        use_improved_sigmoid,
+        use_improved_weight_init)
+    sig_trainer = SoftmaxTrainer(
+        momentum_gamma, use_momentum,
+        sig_model, learning_rate, batch_size, shuffle_data,
+        X_train, Y_train, X_val, Y_val,
+    )
+    sig_train_history, sig_val_history = sig_trainer.train(num_epochs)
     
     use_momentum=True
     learning_rate=0.02
@@ -90,19 +90,19 @@ if __name__ == "__main__":
     plt.ylim([0., .5])
     
     
-    # utils.plot_loss(train_history["loss"],"Training Loss", npoints_to_average=10)
-    # utils.plot_loss(val_history["loss"], "Validation Loss")
+    utils.plot_loss(train_history["loss"],"Training Loss", npoints_to_average=10)
+    utils.plot_loss(val_history["loss"], "Validation Loss")
     
-    # utils.plot_loss(wei_train_history["loss"],"improved Weight Training Loss", npoints_to_average=10)
-    # utils.plot_loss(wei_val_history["loss"], "improved Weight Validation Loss")
-    
-    
-    utils.plot_loss(mom_train_history["loss"],"64 Training Loss", npoints_to_average=10)
-    utils.plot_loss(mom_val_history["loss"], "64 Validation Loss")
+    utils.plot_loss(wei_train_history["loss"],"improved Weight Training Loss", npoints_to_average=10)
+    utils.plot_loss(wei_val_history["loss"], "improved Weight Validation Loss")
     
     
-    # utils.plot_loss(sig_train_history["loss"],"improved sigmoid Training Loss", npoints_to_average=10)
-    # utils.plot_loss(sig_val_history["loss"], "improved sigmoid Validation Loss")
+    utils.plot_loss(mom_train_history["loss"],"Momentum Training Loss", npoints_to_average=10)
+    utils.plot_loss(mom_val_history["loss"], "Momentum Validation Loss")
+    
+    
+    utils.plot_loss(sig_train_history["loss"],"improved sigmoid Training Loss", npoints_to_average=10)
+    utils.plot_loss(sig_val_history["loss"], "improved sigmoid Validation Loss")
   
     
     plt.legend()
@@ -114,17 +114,19 @@ if __name__ == "__main__":
     # Plot accuracy
     plt.subplot(1, 2, 2)
     plt.ylim([0.90, .99])
-    # utils.plot_loss(train_history["accuracy"], "Training Accuracy")
-    # utils.plot_loss(val_history["accuracy"], "Validation Accuracy")
     
-    # utils.plot_loss(wei_train_history["accuracy"], "improved Weight Training Accuracy")
-    # utils.plot_loss(wei_val_history["accuracy"], "improved Weight Validation Accuracy")
+    utils.plot_loss(train_history["accuracy"], "Training Accuracy")
+    utils.plot_loss(val_history["accuracy"], "Validation Accuracy")
+    
+    utils.plot_loss(wei_train_history["accuracy"], "improved Weight Training Accuracy")
+    utils.plot_loss(wei_val_history["accuracy"], "improved Weight Validation Accuracy")
     
     
-    utils.plot_loss(mom_train_history["accuracy"], "64 Training Accuracy")
-    utils.plot_loss(mom_val_history["accuracy"], "64 Validation Accuracy")
-    # utils.plot_loss(sig_train_history["accuracy"], "improved sigmoid Training Accuracy")
-    # utils.plot_loss(sig_val_history["accuracy"], "improved sigmoid Validation Accuracy")
+    utils.plot_loss(mom_train_history["accuracy"], "Momentum Training Accuracy")
+    utils.plot_loss(mom_val_history["accuracy"], "Momentum Validation Accuracy")
+    
+    utils.plot_loss(sig_train_history["accuracy"], "improved sigmoid Training Accuracy")
+    utils.plot_loss(sig_val_history["accuracy"], "improved sigmoid Validation Accuracy")
     
     
     
