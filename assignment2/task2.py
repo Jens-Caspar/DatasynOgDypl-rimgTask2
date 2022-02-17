@@ -42,6 +42,11 @@ class SoftmaxTrainer(BaseTrainer):
         self.use_momentum = use_momentum
         # Init a history of previous gradients to use for implementing momentum
         self.previous_grads = [np.zeros_like(w) for w in self.model.ws]
+        
+        # self.model.ws[0]=np.random.uniform(-1, 1, (785, 64))
+        # self.model.ws[1]=np.random.uniform(-1, 1, (64, 10))
+        self.model.ws[0]=np.random.normal(0,1/np.sqrt(785), size=(785, 64))
+        self.model.ws[1]=np.random.normal(0,1/np.sqrt(64), size=(64, 10))
 
     def train_step(self, X_batch: np.ndarray, Y_batch: np.ndarray):
         """
@@ -56,8 +61,6 @@ class SoftmaxTrainer(BaseTrainer):
             loss value (float) on batch
         """
         # TODO: Implement this function (task 2c)
-        self.model.ws[0]=np.random.uniform(-1, 1, (785, 64))
-        self.model.ws[1]=np.random.uniform(-1, 1, (64, 10))
         
         
         forwardStep=self.model.forward(X_batch)
@@ -139,8 +142,8 @@ if __name__ == "__main__":
     # Plot loss for first model (task 2c)
     plt.figure(figsize=(20, 12))
     plt.subplot(1, 2, 1)
-    plt.ylim([0., 5.5])
-    # plt.ylim([0., .5])
+    # plt.ylim([0., 5.5])
+    plt.ylim([0., .5])
     utils.plot_loss(train_history["loss"],
                     "Training Loss", npoints_to_average=10)
     utils.plot_loss(val_history["loss"], "Validation Loss")
