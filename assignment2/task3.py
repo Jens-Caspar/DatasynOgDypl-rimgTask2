@@ -72,7 +72,7 @@ if __name__ == "__main__":
     use_improved_sigmoid=True
     use_improved_weight_init=True
     
-    learning_rate=0.15
+    learning_rate=0.03
     mom_model = SoftmaxModel(
         neurons_per_layer,
         use_improved_sigmoid,
