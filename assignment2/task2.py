@@ -37,16 +37,21 @@ class SoftmaxTrainer(BaseTrainer):
             use_momentum: bool,
             *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-
         self.momentum_gamma = momentum_gamma
         self.use_momentum = use_momentum
         # Init a history of previous gradients to use for implementing momentum
         self.previous_grads = [np.zeros_like(w) for w in self.model.ws]
         
-        # self.model.ws[0]=np.random.uniform(-1, 1, (785, 64))
-        # self.model.ws[1]=np.random.uniform(-1, 1, (64, 10))
-        self.model.ws[0]=np.random.normal(0,1/np.sqrt(785), size=(785, 64))
-        self.model.ws[1]=np.random.normal(0,1/np.sqrt(64), size=(64, 10))
+        # if use_improved_weight_init:
+        #     self.model.ws[0]=np.random.normal(0,1/np.sqrt(785), size=(785, 64))
+        #     self.model.ws[1]=np.random.normal(0,1/np.sqrt(64), size=(64, 10))
+        # else:
+        #     self.model.ws[0]=np.random.uniform(-1, 1, (785, 64))
+        #     self.model.ws[1]=np.random.uniform(-1, 1, (64, 10))
+        
+        
+        # self.model.ws[0]=np.random.normal(0,1/np.sqrt(785), size=(785, 64))
+        # self.model.ws[1]=np.random.normal(0,1/np.sqrt(64), size=(64, 10))
 
     def train_step(self, X_batch: np.ndarray, Y_batch: np.ndarray):
         """
@@ -66,8 +71,13 @@ class SoftmaxTrainer(BaseTrainer):
         forwardStep=self.model.forward(X_batch)
         # print(forwardStep)
         self.model.backward(X_batch, forwardStep,Y_batch)
-        self.model.ws[0]=self.model.ws[0]-self.learning_rate*self.model.grads[0]
-        self.model.ws[1]=self.model.ws[1]-self.learning_rate*self.model.grads[1]
+        
+        if self.use_momentum:          
+            self.model.ws[0]=self.model.ws[0]-self.learning_rate* (self.model.grads[0] + self.momentum_gamma*self.previous_grads[0])
+            self.model.ws[1]=self.model.ws[1]-self.learning_rate* (self.model.grads[1] + self.momentum_gamma*self.previous_grads[1])
+        else:
+            self.model.ws[0]=self.model.ws[0]-self.learning_rate*self.model.grads[0]
+            self.model.ws[1]=self.model.ws[1]-self.learning_rate*self.model.grads[1]
 
         
         loss = cross_entropy_loss(Y_batch, forwardStep)
@@ -88,6 +98,7 @@ class SoftmaxTrainer(BaseTrainer):
             accuracy_train (float): Accuracy on train dataset
             accuracy_val (float): Accuracy on the validation dataset
         """
+        
         # NO NEED TO CHANGE THIS FUNCTION
         logits = self.model.forward(self.X_val)
         loss = cross_entropy_loss(self.Y_val, logits)
