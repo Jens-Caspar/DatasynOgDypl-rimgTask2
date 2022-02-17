@@ -54,6 +54,7 @@ if __name__ == "__main__":
     wei_train_history, wei_val_history = wei_trainer.train(num_epochs)
     
     use_improved_sigmoid=True
+    use_improved_weight_init=True
     
     
     sig_model = SoftmaxModel(
@@ -68,7 +69,10 @@ if __name__ == "__main__":
     sig_train_history, sig_val_history = sig_trainer.train(num_epochs)
     
     use_momentum=True
-    learning_rate=0.02
+    use_improved_sigmoid=True
+    use_improved_weight_init=True
+    
+    learning_rate=0.15
     mom_model = SoftmaxModel(
         neurons_per_layer,
         use_improved_sigmoid,
