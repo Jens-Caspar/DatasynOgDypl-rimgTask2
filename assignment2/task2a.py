@@ -57,6 +57,7 @@ class SoftmaxModel:
         # Define number of input nodes
         self.I = 785 #None
         self.use_improved_sigmoid = use_improved_sigmoid
+        
 
         # Define number of output nodes
         # neurons_per_layer = [64, 10] indicates that we will have two layers:
@@ -75,6 +76,13 @@ class SoftmaxModel:
         self.grads = [None for i in range(len(self.ws))]
         print("gradshape0", self.grads)
         
+        if use_improved_weight_init:
+            self.ws[0]=np.random.normal(0,1/np.sqrt(785), size=(785, 64))
+            self.ws[1]=np.random.normal(0,1/np.sqrt(64), size=(64, 10))
+        else:
+            self.ws[0]=np.random.uniform(-1, 1, (785, 64))
+            self.ws[1]=np.random.uniform(-1, 1, (64, 10))
+        
         self.hidden_layer_output=[]
 
     def forward(self, X: np.ndarray) -> np.ndarray:
@@ -91,7 +99,12 @@ class SoftmaxModel:
         # such as self.hidden_layer_output = ...
         # 
         hidden_layer_z=X@self.ws[0]  #batchsize X N_neurons
-        self.hidden_layer_output=1/(1+np.exp(-hidden_layer_z))
+        
+        if self.use_improved_sigmoid:
+            self.hidden_layer_output=1.715* np.tanh((2/3)*hidden_layer_z)
+        else:
+            self.hidden_layer_output=1/(1+np.exp(-hidden_layer_z))
+        
         output_layer_z=self.hidden_layer_output@self.ws[1] #batchsize X N_outputs
         summering=np.sum(np.exp(output_layer_z), axis=1)
         summering=summering.reshape(len(summering),1)
@@ -115,18 +128,16 @@ class SoftmaxModel:
             f"Output shape: {outputs.shape}, targets: {targets.shape}"
         # A list of gradients.
         # For example, self.grads[0] will be the gradient for the first hidden layer
-        self.grads = []
-        # print(self.grads)
         
-
-        # print(self.hidden_layer_output.shape, "hei",(-(targets-outputs)).shape )
+        
+        self.grads = []
         grad1=np.transpose(-(targets-outputs))@(self.hidden_layer_output)
         
-        
-        # print("testasda", grad1.shape, (self.ws[1] @ grad1).shape)
-        # print("adkjfbsdlkhfbl",  self.hidden_layer_output.shape, (1-self.hidden_layer_output).shape , (-(targets-outputs)).shape, np.transpose(self.ws[1]).shape)
-        grad0=np.transpose( np.multiply(self.hidden_layer_output * (1-self.hidden_layer_output) ,((-(targets-outputs))@np.transpose(self.ws[1]))) )  @  X
-        # print("gradshape", grad0.shape, grad1.shape)
+        if self.use_improved_sigmoid:
+            grad0=np.transpose(np.multiply(((2/3)*(1.7159-(1/1.7159)*np.power(self.hidden_layer_output,2))),((-(targets-outputs))@np.transpose(self.ws[1]))))   @  X
+        else:
+            grad0=np.transpose( np.multiply(self.hidden_layer_output * (1-self.hidden_layer_output) ,((-(targets-outputs))@np.transpose(self.ws[1]))) )  @  X
+
         
         self.grads= [np.transpose(grad0)/X.shape[0],np.transpose(grad1)/X.shape[0]]
 
